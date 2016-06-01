@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>CodePlay</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	
+  </head>
+  
+  <style>
+
+	.navbar-brand{
+		font-weight: bold;
+		font-size: 2.4em;
+	}
+	
+	.toggles{
+		font-size: 1.2em;
+		border-right: 2px solid white;
+		font-weight: bold;
+	}
+	
+	#run_link{
+			padding: 0px;
+			margin: 0px;
+			margin-right: 50px;
+			margin-top: 2px;
+	}
+	
+	.code_container{
+		
+		height: 100%;
+		width: 50%;
+		float: left;
+		padding: 0px;
+	}
+	
+	.code_container textarea{
+		width: 100%;
+		box-sizing: border-box;
+		padding: 20px;
+		font-size: 1.2em;
+		border: none;
+		border-right: 2px solid grey;
+		font-weight: bold;
+		font-family: Avant Garde,Avantgarde,Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+		height: 100%;
+		resize: none;
+	}
+	
+	iframe{
+		width: 100%;
+		padding: 20px;
+		font-size: 1.2em;
+		border: none;
+		height: 100%;
+		resize: none;
+	}
+	
+	#css_container, #js_container{
+		display: none;
+	}
+	
+	.inactiveLink {
+		pointer-events: none;
+		cursor: default;
+	}
+	
+	
+  </style>
+  
+  <body>
+  
+
+  
+		<nav class="navbar navbar-inverse navbar-fixed-top" id="nav">
+			<div class="container-fluid">
+				
+				<div class ="navbar-header">
+					<a class="navbar-brand" href="#" style="color: yellow;">Code Play</a>
+				</div>
+				
+				<ul class="nav navbar-nav" style="margin-left: 320px; ">
+					<li class="active toggles" id="html"><a href="#" class="inactiveLink">HTML</a></li>
+					<li class="toggles" id="css"><a href="#" class="inactiveLink">CSS</a></li>
+					<li class="toggles" id="js"><a href="#" class="inactiveLink">Javascript</a></li>
+					<li class="toggles active" id="output"><a href="#" class="inactiveLink">Output</a></li>
+				</ul>
+				
+				<ul class="nav navbar-nav navbar-right">
+					<li id="run_link"><button class="btn btn-success btn-lg" style="margin-bottom: 0px; width: 100px;" id="run"> <span class="glyphicon glyphicon-play" style="margin-right: 4px;"></span>Run</button> </li>
+				</ul>
+				
+			</div>
+		</nav>
+		
+		
+		<div class="container code_container" id="html_container">
+			<textarea class="form-control" id="html_code" placeholder="Type your HTML code here .."></textarea>
+		</div>
+		
+		<div class="container code_container" id="css_container">
+			<textarea class="form-control" id="css_code" placeholder="Type your CSS code here .."></textarea>
+		</div>
+		
+		<div class="container code_container" id="js_container">
+			<textarea class="form-control" id="js_code" placeholder="Type your JS code here .."></textarea>
+		</div>
+		
+		<div class="container code_container" id="output_container">
+			
+			<iframe id="resultFrame"></iframe>
+		</div>
+		
+		
+  
+	
+			
+			
+		
+	<!-- Javascript starts here -->
+	<script>
+	
+		var window_h = $(window).height();
+		var navbar_h =  $("#nav").height();
+		var container_h = window_h - navbar_h ;
+		var margin_top = navbar_h+"px";
+		$(".code_container").css("margin-top",margin_top);
+		$(".code_container").height(container_h+"px");
+		
+		
+		$("#html").click(function() {
+			$(this).toggleClass("active");
+			$("#html_container").toggle();
+			var width = 100/num_divs();
+			$(".code_container").css("width",width+"%");
+		});
+		
+		$("#css").click(function() {
+			$(this).toggleClass("active");
+			$("#css_container").toggle();
+			var width = 100/num_divs();
+			$(".code_container").css("width",width+"%");
+		});
+		
+		$("#js").click(function() {
+			$(this).toggleClass("active");
+			$("#js_container").toggle();
+			var width = 100/num_divs();
+			$(".code_container").css("width",width+"%");
+		});
+		
+		$("#output").click(function() {
+			$(this).toggleClass("active");
+			$("#output_container").toggle();
+			var width = 100/num_divs();
+			$(".code_container").css("width",width+"%");
+		});
+		
+		$("#run").click(function(){
+		
+			$("iframe").contents().find("html").html('<style>' + $("#css_code").val() + '</style>' + $("#html_code").val() );
+			document.getElementById("resultFrame").contentWindow.eval($("#js_code").val());
+		});
+		
+		function num_divs()
+		{
+			var count = 0;
+			if($("#html_container").css("display")!="none")
+				count++;
+			if($("#css_container").css("display")!="none")
+				count++;
+			if($("#js_container").css("display")!="none")
+				count++;
+			if($("#output_container").css("display")!="none")
+				count++;
+			return count;
+		}
+	
+		
+	</script>
+    
+    
+  </body>
+</html>
